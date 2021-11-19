@@ -18,7 +18,7 @@ namespace GraphExchange.Services
                 ApiUrl = ConfigurationManager.AppSettings["ida:ApiUrl"]
 
             };
-            string[] scopes = new string[] { $"api://71a2b13d-398e-4ce2-9994-2bf00720a982/.default" };
+            string[] scopes = new string[] { $"{config.ApiUrl}.default" };
             AuthenticationResult result = null;
             IConfidentialClientApplication app;
 

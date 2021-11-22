@@ -1,4 +1,5 @@
-﻿using GraphExchange.Services;
+﻿using GraphExchange.Models;
+using GraphExchange.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace GraphExchange.Controllers
     [RoutePrefix("api/account")]
     public class AccountController : ApiController
     {
-        private AppConnector _appConnector = new AppConnector();
+        private GraphWebRequest _graphWebRequest = new GraphWebRequest();
         public AccountController()
         {
 
@@ -20,8 +21,13 @@ namespace GraphExchange.Controllers
         [HttpGet]
         public IHttpActionResult ReadMail()
         {
-            var result = _appConnector.AcquireToken();
-            return Ok();
+            string ApiURL = $"https://graph.microsoft.com/v1.0/me/messages";
+            OAuthAccessToken oAuthAccessToken = _graphWebRequest.GetAccessToken();
+
+            HttpClient httpClient = new HttpClient();
+            var graphApiHandler = new GraphApiHandler(httpClient);
+            var result = graphApiHandler.GetEmail(oAuthAccessToken.access_token);
+            return Json<Object>(result);
         }
     }
 }
